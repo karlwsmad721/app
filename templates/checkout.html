@@ -1,0 +1,151 @@
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        font-family: "Cairo", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .content-wrapper {
+        background: #fff;
+        padding: 40px;
+        border-radius: 25px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+        max-width: 1000px;
+        width: 90%;
+        font-size: 1.2rem;
+    }
+
+    h2, h5, h4 {
+        color: #1976d2;
+        font-weight: bold;
+    }
+
+    label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control {
+        font-size: 1.1rem;
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    /* 🔹 زر إرسال الطلب */
+    .btn-primary {
+        background: #1976d2;
+        border: none;
+        font-size: 1.6rem;
+        border-radius: 15px;
+        padding: 18px 0;
+        transition: 0.3s;
+        display: block;
+        margin: 25px auto 0;
+        width: 80%;
+    }
+
+    .btn-primary:hover {
+        background: #0d47a1;
+        transform: scale(1.05);
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .alert-info {
+        background: #e3f2fd;
+        color: #0d47a1;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    /* 🔹 تكبير صورة المنتج وتوسيطها */
+    .cart-item-img {
+        width: 200px; /* أكبر حجم */
+        height: 200px;
+        object-fit: cover;
+        border-radius: 20px;
+        border: 4px solid #90caf9;
+        display: block;
+        margin: 0 auto 15px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        transition: 0.3s;
+    }
+
+    .cart-item-img:hover {
+        transform: scale(1.05);
+    }
+
+    .cart-item {
+        text-align: center;
+    }
+</style>
+
+<div class="content-wrapper">
+    <h2 class="mb-4 text-center"><i class="fas fa-clipboard-check"></i> إكمال الطلب</h2>
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">معلومات التوصيل</h5>
+                    <form method="POST" action="{{ url_for('checkout') }}">
+                        <div class="mb-3">
+                            <label class="form-label">الاسم الكامل *</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">رقم الهاتف *</label>
+                            <input type="tel" class="form-control" name="phone" required placeholder="01xxxxxxxxx">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">البريد الإلكتروني (اختياري)</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">العنوان الكامل *</label>
+                            <textarea class="form-control" name="address" rows="3" required placeholder="المحافظة، المدينة، الشارع، رقم المبنى"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> إرسال الطلب
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 text-center">ملخص الطلب</h5>
+                    {% for item in cart %}
+                    <div class="cart-item mb-4 pb-3 border-bottom">
+                        <img src="{{ item.image }}" alt="{{ item.name }}" class="cart-item-img">
+                        <div class="fw-bold">{{ item.name }}</div>
+                        <small class="text-muted d-block">الكمية: {{ item.quantity }}</small>
+                        <span class="fw-bold text-primary d-block mt-2">{{ item.price * item.quantity }} جنيه</span>
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="text-center pt-3 border-top">
+                        <h5 class="mb-0">الإجمالي:</h5>
+                        <h4 class="mb-0 text-primary">{{ total }} جنيه</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3">
+                <i class="fas fa-info-circle"></i> سيتم التواصل معك خلال 24 ساعة لتأكيد الطلب وترتيب التوصيل
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

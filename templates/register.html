@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                        <h3 class="fw-bold">إنشاء حساب جديد</h3>
+                        <p class="text-muted">انضم إلينا واستمتع بالتسوق</p>
+                    </div>
+
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">الاسم الكامل *</label>
+                            <input type="text" class="form-control form-control-lg" name="name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">البريد الإلكتروني *</label>
+                            <input type="email" class="form-control form-control-lg" name="email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">رقم الهاتف *</label>
+                            <input type="tel" class="form-control form-control-lg" name="phone" placeholder="01xxxxxxxxx" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">كلمة المرور *</label>
+                            <input type="password" class="form-control form-control-lg" name="password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">
+                            <i class="fas fa-user-plus"></i> إنشاء حساب
+                        </button>
+                    </form>
+
+                    <div class="text-center">
+                        <p class="mb-0">لديك حساب بالفعل؟ 
+                            <a href="{{ url_for('login') }}" class="text-primary fw-bold">تسجيل الدخول</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

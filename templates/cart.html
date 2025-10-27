@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        background: linear-gradient(135deg, #00b4db, #0083b0);
+        font-family: "Cairo", sans-serif;
+    }
+
+    /* 📦 المحتوى على الشمال */
+    .content-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: flex-start; /* فوق */
+        align-items: flex-start;     /* شمال */
+        flex-direction: column;
+        color: #fff;
+        text-align: right;
+        padding: 3rem;
+    }
+
+    h2 {
+        font-size: 2.8rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-align: left;
+        width: 100%;
+    }
+
+    .table {
+        background: #fff;
+        color: #333;
+        border-radius: 15px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 950px;
+        font-size: 1.2rem;
+    }
+
+    .table th {
+        background-color: #e3f2fd;
+        color: #007bff;
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 1.2rem;
+    }
+
+    .table img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    .btn {
+        font-size: 1.3rem;
+        border-radius: 12px;
+        padding: 0.9rem;
+    }
+
+    .btn-primary {
+        background-color: #0069d9;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .whatsapp-btn {
+        background-color: #25D366;
+        color: white;
+        border: none;
+    }
+
+    .whatsapp-btn:hover {
+        background-color: #1ebe5d;
+    }
+
+    .bottom-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-start;
+        margin-top: 2.5rem;
+        width: 100%;
+        max-width: 950px;
+    }
+
+    .empty-cart {
+        text-align: center;
+        margin-top: 5rem;
+    }
+
+    .empty-cart i {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .empty-cart h3 {
+        font-size: 2rem;
+    }
+
+    .empty-cart .btn {
+        background-color: #ffc107;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .empty-cart .btn:hover {
+        background-color: #ffb300;
+    }
+
+</style>
+
+<div class="content-wrapper">
+    <h2><i class="fas fa-shopping-cart"></i> سلة التسوق</h2>
+
+    {% if cart %}
+    <div class="table-responsive shadow-lg rounded">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>المنتج</th>
+                    <th>الصورة</th>
+                    <th>السعر</th>
+                    <th>الكمية</th>
+                    <th>المجموع</th>
+                    <th>حذف</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>
+                        <img src="{{ item.image }}" alt="{{ item.name }}">
+                    </td>
+                    <td>{{ item.price }} جنيه</td>
+                    <td>{{ item.quantity }}</td>
+                    <td class="fw-bold text-success">{{ item.price * item.quantity }} جنيه</td>
+                    <td>
+                        <a href="{{ url_for('remove_from_cart', id=item.id) }}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="table-light">
+                    <td colspan="4" class="text-end fw-bold">الإجمالي:</td>
+                    <td colspan="2" class="fw-bold text-primary h5">{{ total }} جنيه</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="bottom-buttons">
+        <a href="{{ url_for('checkout') }}" class="btn btn-primary w-50">
+            <i class="fas fa-check-circle"></i> إكمال الطلب
+        </a>
+        <a href="{{ url_for('whatsapp_order') }}" class="btn whatsapp-btn w-50">
+            <i class="fab fa-whatsapp"></i> تواصل معنا
+        </a>
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-light">
+            <i class="fas fa-arrow-right"></i> متابعة التسوق
+        </a>
+    </div>
+
+    {% else %}
+    <div class="empty-cart py-5">
+        <i class="fas fa-shopping-cart fa-6x mb-4"></i>
+        <h3>السلة فارغة</h3>
+        <a href="{{ url_for('index') }}" class="btn btn-warning mt-3">
+            <i class="fas fa-shopping-bag"></i> تصفح المنتجات
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

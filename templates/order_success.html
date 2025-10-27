@@ -1,0 +1,30 @@
+{% block content %}
+<div class="content-wrapper text-center">
+    <div class="py-5">
+        <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+        <h1 class="display-4 fw-bold mb-3">تم إرسال طلبك بنجاح!</h1>
+        <p class="lead text-muted mb-4">شكراً لك على طلبك. رقم الطلب: <strong>#{{ order.id }}</strong></p>
+        
+        <div class="card border-0 shadow-sm d-inline-block text-start" style="max-width: 500px;">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="fas fa-user"></i> معلومات الطلب</h5>
+                <p class="mb-2"><strong>الاسم:</strong> {{ order.customer_name }}</p>
+                <p class="mb-2"><strong>الهاتف:</strong> {{ order.phone }}</p>
+                <p class="mb-2"><strong>العنوان:</strong> {{ order.address }}</p>
+                <p class="mb-2"><strong>الإجمالي:</strong> <span class="text-primary fw-bold">{{ order.total }} جنيه</span></p>
+                <p class="mb-0"><strong>التاريخ:</strong> {{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+        </div>
+
+        <div class="alert alert-info mt-4 d-inline-block" style="max-width: 500px;">
+            <i class="fas fa-phone"></i> سنتواصل معك خلال 24 ساعة لتأكيد الطلب وترتيب التوصيل
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-home"></i> العودة للرئيسية
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

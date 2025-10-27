@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0"><i class="fas fa-plus-circle"></i> إضافة منتج جديد</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">اسم المنتج *</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">الوصف *</label>
+                            <textarea class="form-control" name="description" rows="3" required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">السعر (جنيه) *</label>
+                                <input type="number" class="form-control" name="price" step="0.01" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">الكمية المتوفرة *</label>
+                                <input type="number" class="form-control" name="stock" value="10" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">الفئة *</label>
+                            <select class="form-select" name="category" required>
+                                <option value="">اختر الفئة</option>
+                                <option value="دمى">دمى</option>
+                                <option value="سيارات">سيارات</option>
+                                <option value="تعليمية">تعليمية</option>
+                                <option value="خارجية">خارجية</option>
+                                <option value="فنية">فنية</option>
+                                <option value="رياضية">رياضية</option>
+                                <option value="أخرى">أخرى</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">رابط الصورة *</label>
+                            <input type="url" class="form-control" name="image" 
+                                   placeholder="https://example.com/image.jpg" required>
+                            <small class="text-muted">أدخل رابط صورة من الإنترنت (مثال: من Unsplash أو أي موقع آخر)</small>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" name="featured" id="featured">
+                            <label class="form-check-label" for="featured">
+                                <strong>🌟 عرض خاص</strong> (سيظهر في السلايدر الرئيسي)
+                            </label>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> حفظ المنتج
+                            </button>
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> إلغاء
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3">
+                <strong><i class="fas fa-lightbulb"></i> نصيحة:</strong> يمكنك الحصول على صور مجانية من مواقع مثل:
+                <ul class="mb-0 mt-2">
+                    <li><a href="https://unsplash.com" target="_blank">Unsplash.com</a></li>
+                    <li><a href="https://pixabay.com" target="_blank">Pixabay.com</a></li>
+                    <li><a href="https://pexels.com" target="_blank">Pexels.com</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

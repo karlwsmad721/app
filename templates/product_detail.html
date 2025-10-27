@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm">
+                <img src="{{ product.image }}" class="card-img-top" style="height: 400px; object-fit: cover;">
+            </div>
+        </div>
+        
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <span class="badge bg-secondary">{{ product.category }}</span>
+                            {% if product.featured %}
+                            <span class="badge bg-warning">🌟 عرض خاص</span>
+                            {% endif %}
+                        </div>
+                        {% if session.user_id %}
+                        <a href="{% if is_in_wishlist %}{{ url_for('remove_from_wishlist', id=product.id) }}{% else %}{{ url_for('add_to_wishlist', id=product.id) }}{% endif %}" 
+                           class="btn btn-light">
+                            <i class="{% if is_in_wishlist %}fas{% else %}far{% endif %} fa-heart text-danger"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                    <h2 class="fw-bold mb-3">{{ product.name }}</h2>
+                    
+                    <div class="mb-3">
+                        {% if product.average_rating > 0 %}
+                        <span class="text-warning h5">
+                            {% for i in range(5) %}
+                                {% if i < product.average_rating %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                        <span class="text-muted">({{ product.average_rating|round(1) }}) - {{ reviews|length }} تقييم</span>
+                        {% else %}
+                        <span class="text-muted">لا توجد تقييمات بعد</span>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="lead mb-4">{{ product.description }}</p>
+                    
+                    <h3 class="text-primary mb-4">{{ product.price }} جنيه</h3>
+                    
+                    <div class="mb-4">
+                        {% if product.stock > 0 %}
+                            <span class="badge bg-success">متوفر - {{ product.stock }} قطعة</span>
+                        {% else %}
+                            <span class="badge bg-danger">نفذ من المخزون</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        {% if product.stock > 0 %}
+                            <a href="{{ url_for('add_to_cart', id=product.id) }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-cart-plus"></i> أضف للسلة
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-lg" disabled>غير متوفر حالياً</button>
+                        {% endif %}
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-right"></i> العودة للمنتجات
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body p-4">
+            <h4 class="mb-4"><i class="fas fa-comments"></i> التقييمات والمراجعات</h4>
+            
+            {% if session.user_id %}
+            <div class="card bg-light mb-4">
+                <div class="card-body">
+                    <h5 class="mb-3">أضف تقييمك</h5>
+                    <form method="POST" action="{{ url_for('add_review', product_id=product.id) }}">
+                        <div class="mb-3">
+                            <label class="form-label">التقييم</label>
+                            <div class="star-rating">
+                                <input type="radio" name="rating" value="5" id="star5" required>
+                                <label for="star5"><i class="fas fa-star"></i></label>
+                                <input type="radio" name="rating" value="4" id="star4">
+                                <label for="star4"><i class="fas fa-star"></i></label>
+                                <input type="radio" name="rating" value="3" id="star3">
+                                <label for="star3"><i class="fas fa-star"></i></label>
+                                <input type="radio" name="rating" value="2" id="star2">
+                                <label for="star2"><i class="fas fa-star"></i></label>
+                                <input type="radio" name="rating" value="1" id="star1">
+                                <label for="star1"><i class="fas fa-star"></i></label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">تعليقك</label>
+                            <textarea class="form-control" name="comment" rows="3" placeholder="شارك تجربتك مع هذا المنتج..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> إرسال التقييم
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> يجب <a href="{{ url_for('login') }}" class="alert-link">تسجيل الدخول</a> لإضافة تقييم
+            </div>
+            {% endif %}
+            
+            <!-- Reviews List -->
+            {% if reviews %}
+            <div class="mt-4">
+                {% for review in reviews %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <strong>{{ review.user.name }}</strong>
+                                <div class="text-warning">
+                                    {% for i in range(5) %}
+                                        {% if i < review.rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <small class="text-muted">{{ review.date.strftime('%Y-%m-%d') }}</small>
+                        </div>
+                        <p class="mb-0">{{ review.comment }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted text-center py-4">لا توجد تقييمات بعد. كن أول من يقيم هذا المنتج!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.star-rating {
+    direction: ltr;
+    display: inline-flex;
+    flex-direction: row-reverse;
+}
+.star-rating input {
+    display: none;
+}
+.star-rating label {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffc107;
+}
+</style>
+{% endblock %}

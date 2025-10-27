@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>صفحة الادمن</title>
+</head>
+<body>
+    <h1>مرحبا بك في صفحة الادمن</h1>
+    <form method="POST">
+        <input type="text" name="name" placeholder="اسم المنتج">
+        <button type="submit">أضف المنتج</button>
+    </form>
+    <a href="{{ url_for('home') }}">رجوع للرئيسية</a>
+</body>
+</html>
